@@ -34,7 +34,10 @@ class Certificate extends Model
             return null;
         }
 
-        return Certificate::create([
+        return Certificate::updateOrCreate([
+          'common_name' => $certificate->getDomain(),
+        ],
+            [
             'gateway_id' => $gateway->id,
             'type' => $type,
             'common_name' => $certificate->getDomain(),

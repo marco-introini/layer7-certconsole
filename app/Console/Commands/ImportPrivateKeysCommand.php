@@ -9,6 +9,7 @@ use App\Models\Certificate;
 use App\Models\Gateway;
 use Exception;
 use Illuminate\Console\Command;
+use Log;
 use Spatie\SslCertificate\SslCertificate;
 
 class ImportPrivateKeysCommand extends Command
@@ -24,29 +25,18 @@ class ImportPrivateKeysCommand extends Command
         $response = $connector->send(new PrivateKeys());
 
         if ($response->status() !== 200) {
-            // errore
+            // error
+            Log::error('Error getting private keys from Layer7: ' . $response->status(). " - ". $response->body());
         }
 
         $reader = $response->xmlReader();
-        $raw = $response->body();
+        //$raw = $response->body();
 
         $keys = $reader->value('l7:Encoded')->get();
         foreach ($keys as $key) {
-            try {
-                $pemData = SslCertificate::der2pem(base64_decode($key));
-                $certResource = @openssl_x509_read($pemData);
-                if ($certResource === false) {
-                    echo("Certificate is not a valid DER format certificate.");
-                    continue;
-                }
-                Certificate::fromPemCertificate($gateway, CertificateType::PRIVATE_KEY, $pemData);
-            }
-            catch (Exception $e) {
-                echo $e->getMessage();
-                continue;
-            }
+            $pemData = SslCertificate::der2pem(base64_decode($key));
+            Certificate::fromPemCertificate($gateway, CertificateType::PRIVATE_KEY, $pemData);
         }
-
 
     }
 }

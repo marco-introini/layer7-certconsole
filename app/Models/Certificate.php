@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Enumerations\CertificateType;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 use Spatie\SslCertificate\SslCertificate;
 
 class Certificate extends Model
@@ -23,8 +25,14 @@ class Certificate extends Model
         Gateway $gateway,
         CertificateType $type,
         string $pemData,
-    ): self {
-        $certificate = SslCertificate::createFromString($pemData);
+    ): ?self {
+        try {
+            $certificate = SslCertificate::createFromString($pemData);
+        }
+        catch (Exception $e) {
+            Log::error("Error decoding certificate: ".$e->getMessage());
+            return null;
+        }
 
         return Certificate::create([
             'gateway_id' => $gateway->id,

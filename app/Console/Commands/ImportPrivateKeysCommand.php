@@ -3,10 +3,13 @@
 namespace App\Console\Commands;
 
 use App\DataTransferObjects\X509CertificateDTO;
+use App\Enumerations\CertificateType;
 use App\Http\Integrations\Layer7\Layer7RestmanConnector;
 use App\Http\Integrations\Layer7\Requests\PrivateKeys;
+use App\Models\Certificate;
 use App\Models\Gateway;
 use App\Services\CertificateUtilityService;
+use Exception;
 use Illuminate\Console\Command;
 use Saloon\XmlWrangler\Exceptions\XmlReaderException;
 use Saloon\XmlWrangler\XmlReader;
@@ -16,7 +19,7 @@ class ImportPrivateKeysCommand extends Command
 {
     protected $signature = 'import:private-keys';
 
-    protected $description = 'Command description';
+    protected $description = 'Get all private keys for the gateway and import them into the database.';
 
     public function handle(): void
     {
@@ -36,16 +39,16 @@ class ImportPrivateKeysCommand extends Command
             try {
                 $certResource = @openssl_x509_read(SslCertificate::der2pem(base64_decode($key)));
                 if ($certResource === false) {
-                    echo("Il certificato non è in formato DER corretto.");
+                    echo("Certificate is not a valid DER format certificate.");
                     continue;
                 }
                 $cert = SslCertificate::createFromString(SslCertificate::der2pem(base64_decode($key)));
+                Certificate::fromSslCertificate($cert, $gateway, CertificateType::PRIVATE_KEY);
             }
             catch (Exception $e) {
                 echo $e->getMessage();
                 continue;
             }
-            //$dto = X509CertificateDTO::fromCertificate($key);
         }
 
 

@@ -11,14 +11,13 @@ return new class extends Migration {
     {
         Schema::create('certificates', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Gateway::class)->after('id');
-            $table->string('gateway_cert_id')
-                ->nullable();
+            $table->foreignIdFor(Gateway::class);
             $table->string('type')
                 ->default(CertificateType::TRUSTED_CERT);
             $table->string('common_name');
             $table->dateTime('valid_from');
             $table->dateTime('valid_to');
+            $table->text('certificate');
             $table->timestamps();
         });
     }

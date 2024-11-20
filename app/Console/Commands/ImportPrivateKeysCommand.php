@@ -2,17 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\DataTransferObjects\X509CertificateDTO;
 use App\Enumerations\CertificateType;
 use App\Http\Integrations\Layer7\Layer7RestmanConnector;
 use App\Http\Integrations\Layer7\Requests\PrivateKeys;
 use App\Models\Certificate;
 use App\Models\Gateway;
-use App\Services\CertificateUtilityService;
 use Exception;
 use Illuminate\Console\Command;
-use Saloon\XmlWrangler\Exceptions\XmlReaderException;
-use Saloon\XmlWrangler\XmlReader;
 use Spatie\SslCertificate\SslCertificate;
 
 class ImportPrivateKeysCommand extends Command
@@ -37,13 +33,13 @@ class ImportPrivateKeysCommand extends Command
         $keys = $reader->value('l7:Encoded')->get();
         foreach ($keys as $key) {
             try {
-                $certResource = @openssl_x509_read(SslCertificate::der2pem(base64_decode($key)));
+                $pemData = SslCertificate::der2pem(base64_decode($key));
+                $certResource = @openssl_x509_read($pemData);
                 if ($certResource === false) {
                     echo("Certificate is not a valid DER format certificate.");
                     continue;
                 }
-                $cert = SslCertificate::createFromString(SslCertificate::der2pem(base64_decode($key)));
-                Certificate::fromSslCertificate($cert, $gateway, CertificateType::PRIVATE_KEY);
+                Certificate::fromPemCertificate($gateway, CertificateType::PRIVATE_KEY, $pemData);
             }
             catch (Exception $e) {
                 echo $e->getMessage();

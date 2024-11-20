@@ -20,6 +20,7 @@ class CertificateFactory extends Factory
             'common_name' => $this->faker->word(),
             'valid_from' => Carbon::now(),
             'valid_to' => Carbon::now(),
+            'certificate' => fake()->text(), // TODO
             'created_at' => fake()->dateTime(),
             'updated_at' => fake()->dateTime(),
         ];

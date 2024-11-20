@@ -11,25 +11,28 @@ class Certificate extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     protected $casts = [
         'type' => CertificateType::class,
         'valid_to' => 'datetime',
         'valid_from' => 'datetime',
     ];
 
-    public static function fromSslCertificate(
-        SslCertificate $certificate,
+    public static function fromPemCertificate(
         Gateway $gateway,
         CertificateType $type,
-    ): self
-    {
-        $cert = Certificate::create([
+        string $pemData,
+    ): self {
+        $certificate = SslCertificate::createFromString($pemData);
+
+        return Certificate::create([
             'gateway_id' => $gateway->id,
             'type' => $type,
             'common_name' => $certificate->getDomain(),
             'valid_from' => $certificate->validFromDate(),
             'valid_to' => $certificate->expirationDate(),
-
+            'certificate' => $pemData,
         ]);
     }
 }

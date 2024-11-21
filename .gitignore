@@ -22,3 +22,5 @@ yarn-error.log
 /.zed
 /database/seeders/ProductionSeeder.php
 /esempi_xml/
+/public/css/filament/
+/public/js/filament/

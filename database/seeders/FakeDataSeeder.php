@@ -11,6 +11,7 @@ class FakeDataSeeder extends Seeder
     public function run(): void
     {
         Gateway::factory(3)->create();
-        Certificate::factory(30)->create();
+        Certificate::factory(20)->create();
+        Certificate::factory(5)->expired()->create();
     }
 }

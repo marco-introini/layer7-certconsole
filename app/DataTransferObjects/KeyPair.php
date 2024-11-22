@@ -2,7 +2,7 @@
 
 namespace App\DataTransferObjects;
 
-readonly class KeyPair
+readonly final class KeyPair
 {
     public function __construct(
         public string $privateKey,

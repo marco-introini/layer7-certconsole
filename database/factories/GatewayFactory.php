@@ -17,7 +17,7 @@ class GatewayFactory extends Factory
             'host' => fake()->domainName(),
             'identity_provider' => $this->faker->uuid(),
             'admin_user' => $this->faker->userName(),
-            'admin_password' => bcrypt($this->faker->password()),
+            'admin_password' => $this->faker->password(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

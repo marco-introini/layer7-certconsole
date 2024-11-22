@@ -2,23 +2,58 @@
 
 namespace App\Services;
 
+use App\DataTransferObjects\KeyPair;
+use Illuminate\Support\Carbon;
+
 class CertificateUtilityService
 {
-    public static function der2pem(string $der_data): string
+    public static function generateCertificate(string $commonName, ?Carbon $expirationDate): KeyPair
     {
-        $pem = chunk_split(base64_encode($der_data), 64, "\n");
+        $config = [
+            'digest_alg' => config('x509-generator.cert_alg'),
+            'private_key_bits' => config('x509-generator.cert_keybit'),
+            'private_key_type' => OPENSSL_KEYTYPE_RSA,
+            'dn' => [
+                'countryName' => config('x509-generator.cert_country'),
+                'stateOrProvinceName' => config('x509-generator.cert_state'),
+                'localityName' => config('x509-generator.cert_city'),
+                'organizationName' => config('x509-generator.cert_organization_name'),
+                'organizationalUnitName' => config('x509-generator.cert_organization_unit'),
+                'commonName' => $commonName,
+                'emailAddress' => config('x509-generator.cert_email'),
+                'serialNumber' => self::generateSerialNumber(),
+            ],
+        ];
 
-        return "-----BEGIN CERTIFICATE-----\n".$pem."-----END CERTIFICATE-----\n";
+        $privateKeyResource = openssl_pkey_new($config);
+        openssl_pkey_export($privateKeyResource, $privateKey);
+
+        $csr = openssl_csr_new($config['dn'], $privateKeyResource);
+
+        if (is_null($expirationDate)) {
+            $validityDays = 365;
+        } else {
+            $validityDays = round($expirationDate->diffInDays(Carbon::now(), true));
+        }
+        $certificateResource = openssl_csr_sign($csr, null, $privateKeyResource, $validityDays, $config);
+
+        openssl_x509_export($certificateResource, $certificate);
+
+        return new KeyPair(
+            $privateKey,
+            $certificate);
     }
 
-    public static function pem2der(string $pem_data): string
+    public static function generateSerialNumber($length = 16): string
     {
-        $begin = 'CERTIFICATE-----';
-        $end = '-----END';
-        $pem_data = substr($pem_data, strpos($pem_data, $begin) + strlen($begin));
-        $pem_data = substr($pem_data, 0, strpos($pem_data, $end));
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $serial = '';
+        for ($i = 0; $i < $length; $i++) {
+            $index = rand(0, strlen($characters) - 1);
+            $serial .= $characters[$index];
+        }
 
-        return base64_decode($pem_data);
+        return $serial;
     }
 
 }

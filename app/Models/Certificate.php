@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use App\Enumerations\CertificateType;
+use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Log;
 use Spatie\SslCertificate\SslCertificate;
+use function Pest\Laravel\get;
 
 class Certificate extends Model
 {
@@ -25,6 +28,13 @@ class Certificate extends Model
     public function gateway(): BelongsTo
     {
         return $this->belongsTo(Gateway::class);
+    }
+
+    public function isValid(): Attribute
+    {
+        return Attribute::make(
+           get: fn() => $this->valid_to >= Carbon::now()
+        );
     }
 
     public static function fromPemCertificate(

@@ -9,6 +9,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Livewire\Component;
 use Filament\Tables\Table;
@@ -45,7 +46,7 @@ class Home extends Component implements HasForms, HasTable
                     ->options(CertificateType::class),
                 SelectFilter::make('gateway')
                     ->relationship('gateway', 'name')
-            ])
+            ], layout: FiltersLayout::AboveContent)
             ->actions([
                 // ...
             ])

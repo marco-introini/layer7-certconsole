@@ -4,3 +4,7 @@ check:
 production_data:
 	php artisan migrate:fresh --seed
 	php artisan db:seed --class ProductionSeeder
+
+fake_data:
+	php artisan migrate:fresh --seed
+	php artisan db:seed --class FakeDataSeeder

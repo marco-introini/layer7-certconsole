@@ -22,7 +22,9 @@ class CertificateFactory extends Factory
             'common_name' => $commonName,
             'valid_from' => Carbon::now(),
             'valid_to' => Carbon::now(),
-            'certificate' => CertificateUtilityService::generateCertificate($commonName, Carbon::now()->addYears(2)),
+            'certificate' =>
+                CertificateUtilityService::generateCertificate($commonName, Carbon::now()->addYears(2))
+                    ->certificate,
             'created_at' => fake()->dateTime(),
             'updated_at' => fake()->dateTime(),
         ];

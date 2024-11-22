@@ -9,6 +9,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Filters\SelectFilter;
 use Livewire\Component;
 use Filament\Tables\Table;
 
@@ -31,12 +32,7 @@ class Home extends Component implements HasForms, HasTable
                 TextColumn::make('gateway.name')
                     ->sortable(),
                 TextColumn::make('type')
-                    ->badge()
-                    ->color(fn(CertificateType $state): string => match ($state) {
-                        CertificateType::TRUSTED_CERT => 'success',
-                        CertificateType::USER_CERTIFICATE => 'warning',
-                        CertificateType::PRIVATE_KEY => 'danger',
-                    }),
+                    ->badge(),
                 TextColumn::make('common_name')
                     ->sortable()
                     ->searchable(),
@@ -44,7 +40,9 @@ class Home extends Component implements HasForms, HasTable
                     ->sortable(),
             ])
             ->filters([
-                // ...
+                SelectFilter::make('type')
+                    ->label('Cert Type')
+                    ->options(CertificateType::class)
             ])
             ->actions([
                 // ...

@@ -7,6 +7,8 @@ use App\Models\Certificate;
 use Carbon\Carbon;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Infolists\Concerns\InteractsWithInfolists;
+use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -18,15 +20,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use Filament\Tables\Table;
 
-class Home extends Component implements HasForms, HasTable
+class ShowCertificates extends Component implements HasForms, HasTable, HasInfolists
 {
     use InteractsWithForms;
     use InteractsWithTable;
+    use InteractsWithInfolists;
 
-
-    public function render()
+    public function render(): \Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\View\View
     {
-        return view('livewire.home');
+        return view('livewire.show-certificates');
     }
 
     public function table(Table $table): Table
@@ -66,4 +68,6 @@ class Home extends Component implements HasForms, HasTable
                 // ...
             ]);
     }
+
+
 }

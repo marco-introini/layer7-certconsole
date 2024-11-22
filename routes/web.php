@@ -1,6 +1,6 @@
 <?php
 
-use App\Livewire\Home;
+use App\Livewire\ShowCertificates;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', Home::class);
+Route::get('/', ShowCertificates::class);

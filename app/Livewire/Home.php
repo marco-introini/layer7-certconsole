@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enumerations\CertificateType;
 use App\Models\Certificate;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -27,7 +28,20 @@ class Home extends Component implements HasForms, HasTable
         return $table
             ->query(Certificate::query())
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('gateway.name')
+                    ->sortable(),
+                TextColumn::make('type')
+                    ->badge()
+                    ->color(fn(CertificateType $state): string => match ($state) {
+                        CertificateType::TRUSTED_CERT => 'success',
+                        CertificateType::USER_CERTIFICATE => 'warning',
+                        CertificateType::PRIVATE_KEY => 'danger',
+                    }),
+                TextColumn::make('common_name')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('valid_to')
+                    ->sortable(),
             ])
             ->filters([
                 // ...

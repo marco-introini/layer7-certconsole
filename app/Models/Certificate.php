@@ -6,6 +6,7 @@ use App\Enumerations\CertificateType;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Log;
 use Spatie\SslCertificate\SslCertificate;
 
@@ -20,6 +21,11 @@ class Certificate extends Model
         'valid_to' => 'datetime',
         'valid_from' => 'datetime',
     ];
+
+    public function gateway(): BelongsTo
+    {
+        return $this->belongsTo(Gateway::class);
+    }
 
     public static function fromPemCertificate(
         Gateway $gateway,

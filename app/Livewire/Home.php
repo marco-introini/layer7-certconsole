@@ -42,7 +42,9 @@ class Home extends Component implements HasForms, HasTable
             ->filters([
                 SelectFilter::make('type')
                     ->label('Cert Type')
-                    ->options(CertificateType::class)
+                    ->options(CertificateType::class),
+                SelectFilter::make('gateway')
+                    ->relationship('gateway', 'name')
             ])
             ->actions([
                 // ...

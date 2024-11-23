@@ -3,13 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Enumerations\CertificateType;
-use App\Http\Integrations\Layer7\Layer7RestmanConnector;
-use App\Http\Integrations\Layer7\Requests\TrustedCertificates;
+use App\Http\Integrations\Layer7\Layer7Integration;
 use App\Models\Certificate;
 use App\Models\Gateway;
 use Illuminate\Console\Command;
-use Log;
-use Spatie\SslCertificate\SslCertificate;
 
 class ImportTrustedCertificatesCommand extends Command
 {
@@ -19,23 +16,13 @@ class ImportTrustedCertificatesCommand extends Command
 
     public function handle(): void
     {
-        $gateway = Gateway::first();
-        $connector = new Layer7RestmanConnector($gateway);
-        $response = $connector->send(new TrustedCertificates());
+        foreach (Gateway::all() as $gateway) {
+            $layer7 = new Layer7Integration($gateway);
+            $collection = $layer7->getTrustedCertificates();
 
-        if ($response->status() !== 200) {
-            // error
-            Log::error('Error getting trusted certificates from Layer7: ' . $response->status(). " - ". $response->body());
+            foreach ($collection as $pemCertificate) {
+                Certificate::fromPemCertificate($gateway, CertificateType::TRUSTED_CERT, $pemCertificate->pemData);
+            }
         }
-
-        $reader = $response->xmlReader();
-        //$raw = $response->body();
-
-        $keys = $reader->value('l7:Encoded')->get();
-        foreach ($keys as $key) {
-            $pemData = SslCertificate::der2pem(base64_decode($key));
-            Certificate::fromPemCertificate($gateway, CertificateType::TRUSTED_CERT, $pemData);
-        }
-
     }
 }

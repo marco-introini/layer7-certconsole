@@ -18,7 +18,7 @@ class ImportPrivateKeysCommand extends Command
     {
         foreach (Gateway::all() as $gateway) {
             $layer7 = new Layer7Integration($gateway);
-            $collection = $layer7->retrievePrivateKeys();
+            $collection = $layer7->getPrivateKeys();
 
             foreach ($collection as $pemCertificate) {
                 Certificate::fromPemCertificate($gateway, CertificateType::PRIVATE_KEY, $pemCertificate->pemData);

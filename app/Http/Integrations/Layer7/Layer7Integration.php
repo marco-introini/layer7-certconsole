@@ -6,6 +6,7 @@ use App\Collections\PemCertificateCollection;
 use App\DataTransferObjects\PemCertificate;
 use App\Enumerations\CertificateType;
 use App\Http\Integrations\Layer7\Requests\PrivateKeys;
+use App\Http\Integrations\Layer7\Requests\TrustedCertificates;
 use App\Models\Certificate;
 use App\Models\Gateway;
 use Illuminate\Support\Facades\Log;
@@ -22,20 +23,42 @@ class Layer7Integration
         $this->connector = new Layer7RestmanConnector($this->gateway);
     }
 
-    public function retrievePrivateKeys(): ?PemCertificateCollection
+    public function getPrivateKeys(): PemCertificateCollection
     {
         $response = $this->connector->send(new PrivateKeys());
+        $collection = new PemCertificateCollection();
 
         if ($response->status() !== 200) {
             // error
             Log::error('Error getting private keys from Layer7: ' . $response->status(). " - ". $response->body());
-            return null;
+            return $collection;
         }
 
         $reader = $response->xmlReader();
         //$raw = $response->body();
 
+        $keys = $reader->value('l7:Encoded')->get();
+        foreach ($keys as $key) {
+            $pemData = SslCertificate::der2pem(base64_decode($key));
+            $collection->add(new PemCertificate($pemData));
+        }
+
+        return $collection;
+    }
+
+    public function getTrustedCertificates(): PemCertificateCollection
+    {
+        $response = $this->connector->send(new TrustedCertificates());
         $collection = new PemCertificateCollection();
+
+        if ($response->status() !== 200) {
+            // error
+            Log::error('Error getting trusted certificates from Layer7: ' . $response->status(). " - ". $response->body());
+            return $collection;
+        }
+
+        $reader = $response->xmlReader();
+        //$raw = $response->body();
 
         $keys = $reader->value('l7:Encoded')->get();
         foreach ($keys as $key) {

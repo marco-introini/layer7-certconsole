@@ -24,3 +24,4 @@ yarn-error.log
 /esempi_xml/
 /public/css/filament/
 /public/js/filament/
+/run_artisan_with_proxy.sh

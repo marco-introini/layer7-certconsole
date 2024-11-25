@@ -5,16 +5,11 @@ namespace App\Livewire;
 use App\Enumerations\CertificateType;
 use App\Models\Certificate;
 use Carbon\Carbon;
-use Filament\Actions\Concerns\InteractsWithActions;
-use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\Layout\Split;
-use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -22,7 +17,6 @@ use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Grouping\Group;
-use GrahamCampbell\ResultType\Error;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use Filament\Tables\Table;
@@ -82,14 +76,6 @@ class ShowCertificates extends Component implements HasForms, HasTable
                     ->getDescriptionFromRecordUsing(fn(Certificate $certificate) => $certificate->gateway->host)
             ])
             ->defaultGroup('gateway.name');
-    }
-
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                TextInput::make('gateway.name'),
-            ]);
     }
 
 }

@@ -7,8 +7,12 @@ use App\Models\Certificate;
 use Carbon\Carbon;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
+use Filament\Infolists\Infolist;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -62,12 +66,26 @@ class ShowCertificates extends Component implements HasForms, HasTable, HasInfol
                     ),
             ], layout: FiltersLayout::AboveContent)
             ->actions([
-                // ...
+                ViewAction::make()
+                    ->color('warning')
+                    ->label("Details"),
             ])
             ->bulkActions([
                 // ...
             ]);
     }
 
+    public function singleCertificate(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make('General')
+                ->columns([
+                    TextEntry::make('gateway.name'),
+                    TextEntry::make('is_valid')->label('Valid?'),
+
+                ])
+            ]);
+    }
 
 }

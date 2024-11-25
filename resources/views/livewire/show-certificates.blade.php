@@ -7,7 +7,4 @@
     <div>
         {{ $this->table }}
     </div>
-
-    {{$this->singleCertificate}}
-
 </div>

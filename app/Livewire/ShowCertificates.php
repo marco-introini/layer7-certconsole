@@ -5,10 +5,14 @@ namespace App\Livewire;
 use App\Enumerations\CertificateType;
 use App\Models\Certificate;
 use Carbon\Carbon;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Concerns\InteractsWithInfolists;
+use Filament\Infolists\Contracts\HasInfolists;
+use Filament\Infolists\Infolist;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -21,10 +25,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use Filament\Tables\Table;
 
-class ShowCertificates extends Component implements HasForms, HasTable
+class ShowCertificates extends Component implements HasForms, HasTable, HasInfolists
 {
     use InteractsWithForms;
     use InteractsWithTable;
+    use InteractsWithInfolists;
 
     public function render(
     ): \Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\View\View
@@ -66,7 +71,23 @@ class ShowCertificates extends Component implements HasForms, HasTable
                     ),
             ], layout: FiltersLayout::AboveContent)
             ->actions([
+                ViewAction::make()
+                    ->infolist([
+                        Section::make('Certificate Info')
+                        ->schema([
+                            TextEntry::make('gateway.name'),
+                            TextEntry::make('type')
+                                ->badge(),
+                            TextEntry::make('common_name')->columnSpanFull(),
+                            TextEntry::make('valid_from'),
+                            TextEntry::make('valid_to'),
+                        ])->columns(),
+                    Section::make('Certificate Content')
+                        ->schema([
+                            TextEntry::make('certificate')->columnSpanFull(),
+                        ])->collapsed()
 
+                    ])
             ])
             ->bulkActions([
                 // ...

@@ -62,6 +62,14 @@ This Laravel 11 project is designed to manage certificates from multiple Layer7 
    ```
 Insert the correct data inside the `gateways` table
 
+## Dummy Data
+
+It's possible to seed fake data for testing this project
+
+```bash
+php artisan db:seed --class FakeDataSeeder
+```
+
 ---
 
 ## Usage

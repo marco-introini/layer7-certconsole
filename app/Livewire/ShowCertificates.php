@@ -78,13 +78,16 @@ class ShowCertificates extends Component implements HasForms, HasTable, HasInfol
                             TextEntry::make('gateway.name'),
                             TextEntry::make('type')
                                 ->badge(),
-                            TextEntry::make('common_name')->columnSpanFull(),
+                            TextEntry::make('common_name')
+                                ->columnSpanFull(),
                             TextEntry::make('valid_from'),
                             TextEntry::make('valid_to'),
                         ])->columns(),
                     Section::make('Certificate Content')
                         ->schema([
-                            TextEntry::make('certificate')->columnSpanFull(),
+                            TextEntry::make('formatted_certificate')
+                                ->columnSpanFull()
+                                ->html(),
                         ])->collapsed()
 
                     ])

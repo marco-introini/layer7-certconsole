@@ -19,6 +19,8 @@ class Certificate extends Model
 
     protected $guarded = [];
 
+    protected $appends = ['formatted_certificate'];
+
     protected $casts = [
         'type' => CertificateType::class,
         'valid_to' => 'datetime',
@@ -34,6 +36,13 @@ class Certificate extends Model
     {
         return Attribute::make(
            get: fn() => $this->valid_to >= Carbon::now()
+        );
+    }
+
+    public function formattedCertificate(): Attribute
+    {
+        return Attribute::make(
+          get: fn() => nl2br($this->certificate)
         );
     }
 

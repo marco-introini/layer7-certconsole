@@ -12,6 +12,29 @@ This Laravel 11 project is designed to manage certificates from multiple Layer7 
 - Console commands for importing data.
 - Flexible and extensible architecture.
 
+The main page is basically a Filament Table with all the information of certificates imported
+
+![Main Project Page](./docs/01_mainpage.png)
+
+You can filter for Certificare Type (User, Trusted, or Private Key), by Gateway or with free text search.
+
+>Note that only the public part of your private keys are imported!
+
+You can also show only valid (i.e., unexpired) certificates or only expired ones
+
+![Filter Invalid Certificates](./docs/02_filters.png)
+
+### Certificate Details
+
+For every certificate you can see the details
+
+![Certificate Details](./docs/03_cert_details.png)
+
+and even see the complete PEM file if needed
+
+![Certificate Details](./docs/04_cert_details.png)
+
+
 ---
 
 ## Prerequisites
@@ -105,31 +128,7 @@ Navigate to `http://localhost:8000` to access the certificate management interfa
 
 ---
 
-# Features
 
-The main page is basically a Filament Table with all the information of certificates imported
-
-![Main Project Page](./docs/01_mainpage.png)
-
-You can filter for Certificare Type (User, Trusted, or Private Key), by Gateway or with free text search.
-
->Note that only the public part of your private keys are imported!
-
-You can also show only valid (i.e., unexpired) certificates or only expired ones
-
-![Filter Invalid Certificates](./docs/02_filters.png)
-
-## Certificate Details
-
-For every certificate you can see the details
-
-![Certificate Details](./docs/03_cert_details.png)
-
-and even see the complete PEM file if needed
-
-![Certificate Details](./docs/04_cert_details.png)
-
----
 
 ## Project Structure
 

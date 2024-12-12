@@ -1,5 +1,7 @@
 check:
 	./vendor/bin/phpstan analyse
+	./vendor/bin/rector --dry-run
+	./vendor/bin/pest
 
 production_data:
 	php artisan migrate:fresh --seed

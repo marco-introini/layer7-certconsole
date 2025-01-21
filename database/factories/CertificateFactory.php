@@ -15,7 +15,7 @@ class CertificateFactory extends Factory
 
     public function definition(): array
     {
-        $commonName = $this->faker->company();
+        $commonName = fake()->company();
         $validFrom = Carbon::now();
         $validTo =  $validFrom->addYears(2);
         return [
@@ -34,7 +34,7 @@ class CertificateFactory extends Factory
 
     public function expired(): static
     {
-        $commonName = $this->faker->company();
+        $commonName = fake()->company();
 
         return $this->state(fn (array $attributes) => [
             'valid_from' => Carbon::now()->subYear(),

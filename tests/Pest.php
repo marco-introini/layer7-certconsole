@@ -11,10 +11,21 @@
 |
 */
 
+use function Pest\Laravel\withoutVite;
+
 pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature')
-    ->in('Unit');
+    ->beforeEach(function () {
+        withoutVite();
+    });
+
+pest()->extend(Tests\TestCase::class)
+    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->in('Unit')
+    ->beforeEach(function () {
+        withoutVite();
+    });
 
 /*
 |--------------------------------------------------------------------------

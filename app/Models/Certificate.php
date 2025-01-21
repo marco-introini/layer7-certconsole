@@ -12,20 +12,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Log;
 use Spatie\SslCertificate\SslCertificate;
 
+/**
+ * @property-read bool $is_valid
+ */
 class Certificate extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
 
-    protected $appends = ['formatted_certificate'];
+    protected $appends = ['formatted_certificate', 'is_valid'];
 
-    protected $casts = [
-        'type' => CertificateType::class,
-        'valid_to' => 'datetime',
-        'valid_from' => 'datetime',
-    ];
-
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\Gateway, $this>
+     */
     public function gateway(): BelongsTo
     {
         return $this->belongsTo(Gateway::class);
@@ -73,5 +73,13 @@ class Certificate extends Model
                 'valid_to' => $certificate->expirationDate(),
                 'certificate' => $pemData,
             ]);
+    }
+    protected function casts(): array
+    {
+        return [
+            'type' => CertificateType::class,
+            'valid_to' => 'datetime',
+            'valid_from' => 'datetime',
+        ];
     }
 }

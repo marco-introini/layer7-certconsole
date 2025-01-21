@@ -11,6 +11,7 @@ This Laravel 11 project is designed to manage certificates from multiple Layer7 
 - Display certificates in a clean and user-friendly interface.
 - Console commands for importing data.
 - Flexible and extensible architecture.
+- Check certificate validity
 
 The main page is basically a Filament Table with all the information of certificates imported
 
@@ -33,7 +34,6 @@ For every certificate you can see the details
 and even see the complete PEM file if needed
 
 ![Certificate Details](./docs/04_cert_details.png)
-
 
 ---
 
@@ -114,6 +114,14 @@ Run the following Artisan commands to fetch and store certificates:
 
    ```bash
    php artisan import:user-certificates
+   ```
+
+34 **Check Certificate Validity**
+
+It's possible to check the expiration date of all imported certificates using this artisan command
+
+   ```bash
+   php artisan certificate:check
    ```
 
 ### Accessing the Interface

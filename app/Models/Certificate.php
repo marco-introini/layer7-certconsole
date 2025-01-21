@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Log;
 use Spatie\SslCertificate\SslCertificate;
-use function Pest\Laravel\get;
 
 class Certificate extends Model
 {
@@ -35,14 +34,19 @@ class Certificate extends Model
     public function isValid(): Attribute
     {
         return Attribute::make(
-           get: fn() => $this->valid_to >= Carbon::now()
+            get: fn() => $this->valid_to >= Carbon::now()
         );
+    }
+
+    public function isAboutToExpire(): bool
+    {
+        return $this->valid_to < Carbon::now()->addDays(config('cert.alert_days_before_expiration'));
     }
 
     public function formattedCertificate(): Attribute
     {
         return Attribute::make(
-          get: fn() => nl2br($this->certificate)
+            get: fn() => nl2br($this->certificate)
         );
     }
 
@@ -53,22 +57,21 @@ class Certificate extends Model
     ): ?self {
         try {
             $certificate = SslCertificate::createFromString($pemData);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             Log::error("Error decoding certificate: ".$e->getMessage());
             return null;
         }
 
         return Certificate::updateOrCreate([
-          'common_name' => $certificate->getDomain(),
+            'common_name' => $certificate->getDomain(),
         ],
             [
-            'gateway_id' => $gateway->id,
-            'type' => $type,
-            'common_name' => $certificate->getDomain(),
-            'valid_from' => $certificate->validFromDate(),
-            'valid_to' => $certificate->expirationDate(),
-            'certificate' => $pemData,
-        ]);
+                'gateway_id' => $gateway->id,
+                'type' => $type,
+                'common_name' => $certificate->getDomain(),
+                'valid_from' => $certificate->validFromDate(),
+                'valid_to' => $certificate->expirationDate(),
+                'certificate' => $pemData,
+            ]);
     }
 }

@@ -19,12 +19,12 @@ class CheckCertificateCommand extends Command
         foreach (Gateway::all() as $gateway) {
             info("Working on ".$gateway->name);
             foreach ($gateway->certificates as $certificate) {
-                if (!$certificate->isValid()) {
-                    error('Certificate '.$certificate->name.' is expired.');
+                if (!$certificate->is_valid) {
+                    error('Certificate '.$certificate->common_name.' is expired.');
                     continue;
                 }
                 if ($certificate->isAboutToExpire()) {
-                    warning('Certificate '.$certificate->name.' is about to expire.');
+                    warning('Certificate '.$certificate->common_name.' is about to expire.');
                 }
             }
         }

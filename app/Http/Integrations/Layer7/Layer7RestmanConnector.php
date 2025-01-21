@@ -10,7 +10,7 @@ use Saloon\Http\Connector;
 class Layer7RestmanConnector extends Connector
 {
     public function __construct(
-        private Gateway $gateway
+        private readonly Gateway $gateway
     ) {
     }
 

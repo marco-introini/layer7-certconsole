@@ -16,7 +16,7 @@ use Spatie\SslCertificate\SslCertificate;
 
 class Layer7Integration
 {
-    private Layer7RestmanConnector $connector;
+    private readonly Layer7RestmanConnector $connector;
 
     public function __construct(
         public Gateway $gateway,
@@ -41,7 +41,7 @@ class Layer7Integration
 
         $keys = $reader->value('l7:Encoded')->get();
         foreach ($keys as $key) {
-            $pemData = SslCertificate::der2pem(base64_decode($key));
+            $pemData = SslCertificate::der2pem(base64_decode((string) $key));
             $collection->add(new PemCertificate($pemData));
         }
 
@@ -64,7 +64,7 @@ class Layer7Integration
 
         $keys = $reader->value('l7:Encoded')->get();
         foreach ($keys as $key) {
-            $pemData = SslCertificate::der2pem(base64_decode($key));
+            $pemData = SslCertificate::der2pem(base64_decode((string) $key));
             $collection->add(new PemCertificate($pemData));
         }
 
@@ -101,7 +101,7 @@ class Layer7Integration
             $keysCert = $readerCert->value('l7:Encoded')->get();
 
             foreach ($keysCert as $keyCert) {
-                $pemData = SslCertificate::der2pem(base64_decode($keyCert));
+                $pemData = SslCertificate::der2pem(base64_decode((string) $keyCert));
                 $collection->add(new PemCertificate($pemData));
             }
         }

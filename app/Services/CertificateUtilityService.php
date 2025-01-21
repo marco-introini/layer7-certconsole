@@ -49,7 +49,7 @@ class CertificateUtilityService
         $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $serial = '';
         for ($i = 0; $i < $length; $i++) {
-            $index = rand(0, strlen($characters) - 1);
+            $index = random_int(0, strlen($characters) - 1);
             $serial .= $characters[$index];
         }
 

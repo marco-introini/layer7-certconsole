@@ -116,9 +116,9 @@ Run the following Artisan commands to fetch and store certificates:
    php artisan import:user-certificates
    ```
 
-34 **Check Certificate Validity**
+4. **Check Certificate Validity**
 
-It's possible to check the expiration date of all imported certificates using this artisan command
+    It's possible to check the expiration date of all imported certificates using this artisan command
 
    ```bash
    php artisan certificate:check

@@ -25,3 +25,4 @@ yarn-error.log
 /public/css/filament/
 /public/js/filament/
 /run_artisan_with_proxy.sh
+/productionChech.sh

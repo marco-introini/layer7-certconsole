@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 /** @extends Collection<int,PemCertificate> */
 final class PemCertificateCollection extends Collection
 {
+    #[\Override]
     public function add($item): self
     {
         if (!$item instanceof PemCertificate) {

@@ -11,12 +11,12 @@ enum CertificateType: string implements HasLabel, HasColor
     case PRIVATE_KEY = 'Private Key';
     case USER_CERTIFICATE = 'User Certificate';
 
-    public function getLabel(): ?string
+    public function getLabel(): string
     {
         return $this->value;
     }
 
-    public function getColor(): string|array|null
+    public function getColor(): string
     {
         return match ($this) {
             self::TRUSTED_CERT => 'success',

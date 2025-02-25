@@ -21,8 +21,6 @@ class Certificate extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['formatted_certificate', 'is_valid'];
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\Gateway, $this>
      */

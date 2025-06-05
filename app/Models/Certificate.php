@@ -73,6 +73,13 @@ class Certificate extends Model
             ]);
     }
 
+    /**
+     * @return array{
+     *     type: 'App\Enumerations\CertificateType',
+     *     valid_to: 'datetime',
+     *     valid_from: 'datetime',
+     * }
+     */
     protected function casts(): array
     {
         return [
@@ -81,4 +88,5 @@ class Certificate extends Model
             'valid_from' => 'datetime',
         ];
     }
+
 }

@@ -72,6 +72,7 @@ class Certificate extends Model
                 'certificate' => $pemData,
             ]);
     }
+
     protected function casts(): array
     {
         return [

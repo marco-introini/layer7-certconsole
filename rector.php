@@ -23,12 +23,9 @@ return RectorConfig::configure()
     ->withTypeCoverageLevel(0)
     ->withRules([
         AddGenericReturnTypeToRelationsRector::class,
-        ReplaceFakerInstanceWithHelperRector::class,
         AnonymousMigrationsRector::class,
-        AddExtendsAnnotationToModelFactoriesRector::class,
-        ModelCastsPropertyToCastsMethodRector::class,
-        MigrateToSimplifiedAttributeRector::class,
     ])
+    ->withImportNames(removeUnusedImports: true)
     ->withSets([
-        LaravelLevelSetList::UP_TO_LARAVEL_110,
+        LaravelLevelSetList::UP_TO_LARAVEL_120,
     ]);

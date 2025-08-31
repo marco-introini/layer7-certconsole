@@ -2,16 +2,18 @@
 
 namespace App\Livewire;
 
+use Filament\Actions\Contracts\HasActions;
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\ViewAction;
+use Filament\Schemas\Components\Section;
 use App\Enumerations\CertificateType;
 use App\Models\Certificate;
 use Carbon\Carbon;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -25,8 +27,9 @@ use Illuminate\View\View;
 use Livewire\Component;
 use Filament\Tables\Table;
 
-class ShowCertificates extends Component implements HasForms, HasTable, HasInfolists
+class ShowCertificates extends Component implements HasForms, HasTable, HasInfolists, HasActions
 {
+    use InteractsWithActions;
     use InteractsWithForms;
     use InteractsWithTable;
     use InteractsWithInfolists;
@@ -70,9 +73,9 @@ class ShowCertificates extends Component implements HasForms, HasTable, HasInfol
                         false: fn(Builder $query) => $query->where('valid_to', '<', Carbon::now()),
                     ),
             ], layout: FiltersLayout::AboveContent)
-            ->actions([
+            ->recordActions([
                 ViewAction::make()
-                    ->infolist([
+                    ->schema([
                         Section::make('Certificate Info')
                         ->schema([
                             TextEntry::make('gateway.name'),
@@ -92,7 +95,7 @@ class ShowCertificates extends Component implements HasForms, HasTable, HasInfol
 
                     ])
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 // ...
             ])
             ->groups([

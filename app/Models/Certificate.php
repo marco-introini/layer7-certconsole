@@ -22,7 +22,7 @@ class Certificate extends Model
     protected $guarded = [];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\Gateway, $this>
+     * @return BelongsTo<Gateway, $this>
      */
     public function gateway(): BelongsTo
     {

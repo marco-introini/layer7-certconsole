@@ -11,7 +11,7 @@ class Gateway extends Model
     use HasFactory;
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\Certificate, $this>
+     * @return HasMany<Certificate, $this>
      */
     public function certificates(): HasMany
     {

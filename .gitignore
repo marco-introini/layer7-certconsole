@@ -26,3 +26,5 @@ yarn-error.log
 /public/js/filament/
 /run_artisan_with_proxy.sh
 /productionChech.sh
+/.junie/
+/boost.json
